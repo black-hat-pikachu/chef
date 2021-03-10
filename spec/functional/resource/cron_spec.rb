@@ -80,6 +80,7 @@ describe Chef::Resource::Cron, :requires_root, :unix_only do
     end
 
     it "should create a crontab entry" do
+      puts shell_out!("ps xauww | egrep crontab | egrep -v grep").stdout
       shell_out!("echo '#foo' | crontab -u root -", timeout: 1)
       new_resource.run_action(:create)
       cron_should_exists(new_resource.name, new_resource.command)
