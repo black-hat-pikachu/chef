@@ -80,10 +80,7 @@ describe Chef::Resource::Cron, :requires_root, :unix_only do
     end
 
     it "should create a crontab entry" do
-      puts shell_out!("cat /var/at/tabs/root").stdout
-      File.open("/var/at/tabs/root") do |f|
-        f.flock(File::LOCK_EX | File::LOCK_NB) or raise "couldn't lock"
-      end
+      puts shell_out!("df -k", timeout: 10).stdout
       shell_out!("echo '#foo' | crontab -u root -", timeout: 10)
       new_resource.run_action(:create)
       cron_should_exists(new_resource.name, new_resource.command)
